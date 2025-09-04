@@ -1,0 +1,139 @@
+body {
+    background-image: url(img/pikb28.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serifs;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+header {
+    text-align: center;
+    justify-content: center;
+}
+
+.menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #f6f1f1;
+    text-align: center;
+    justify-content: center;
+
+}
+
+.contacto p img {
+    width: 30px;
+    height: 30px;
+}
+
+footer {
+    text-align: center;
+    background-color: #f0f0f0;
+    padding: 10px;
+    color: black;
+}
+
+main {
+    flex: 1;
+}
+
+ul li {
+    float: left;
+}
+
+ul li a {
+    display: block;
+    color: darkblue;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+ul li a:hover {
+    background-color: darkblue;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-container {
+    background-color: white;
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 32px 24px;
+    width: 90%;
+    align-items: center;
+    text-align: center;
+    border-radius: 8px;
+    justify-content: center;
+    color: #007bff;
+}
+
+.login-container h2 {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serifs;
+
+}
+
+.login-container label {
+    justify-content: center;
+    display: flex;
+    padding: 10px;
+    text-align: center;
+
+}
+
+.form-pass {
+    height: 20px;
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: darkblue;
+}
+
+.logs {
+    justify-content: center;
+    display: flex;
+    text-align: center;
+}
