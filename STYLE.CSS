@@ -12,8 +12,9 @@ body {
 }
 
 header {
+    display: flex;
     text-align: center;
-    justify-content: center;
+    justify-content: space-around;
 }
 
 .menu ul {
@@ -26,6 +27,8 @@ header {
     justify-content: center;
 
 }
+
+
 
 .contacto p img {
     width: 30px;
@@ -51,11 +54,38 @@ ul li a {
     display: block;
     color: darkblue;
     text-align: center;
-    padding: 14px 16px;
+    padding: 20px;
     text-decoration: none;
 }
 
 ul li a:hover {
+    background-color: darkblue;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+.crear ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #f6f1f1;
+    text-align: center;
+    justify-content: center;
+
+}
+
+.crear ul li a {
+    display: block;
+    color: darkblue;
+    text-align: center;
+    padding: 20px;
+    text-decoration: none;
+}
+
+.crear ul li a:hover {
     background-color: darkblue;
     color: white;
     cursor: pointer;
