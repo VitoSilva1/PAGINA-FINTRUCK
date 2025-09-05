@@ -72,13 +72,10 @@ ul li a:hover {
     padding: 0;
     overflow: hidden;
     background-color: #f6f1f1;
-    text-align: center;
-    justify-content: center;
-
 }
 
 .crear ul li a {
-    display: block;
+
     color: darkblue;
     text-align: center;
     padding: 20px;
