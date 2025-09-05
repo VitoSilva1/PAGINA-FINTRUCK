@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinTruck</title>
+    <link rel="stylesheet" href="stylesCreate.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="img/FinTrack-logo.png" alt="">
+        </div>
+
+        <nav class="menu">
+            <ul>
+                <li><a href="LOG.HTML">Inicio</a></li>
+                <li><a href="news.asp">News</a></li>
+                <li><a href="contact.asp">Contacto</a></li>
+                <li><a href="about.asp">Suscripciones</a></li>
+            </ul>
+        </nav>
+        <div class="iniciar">
+        </div>
+    </header>
+
+    <main>
+
+        <div class="form-container">
+            <h2>Formulario de Contacto</h2>
+            <form>
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+
+                <label for="email">Correo electrónico:</label>
+                <input type="email" id="email" name="email" placeholder="tucorreo@email.com" required>
+
+                <label for="mensaje">Mensaje:</label>
+                <textarea id="mensaje" name="mensaje" rows="5" placeholder="Escribe tu mensaje..." required></textarea>
+
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+
+    </main>
+
+
+    <script src="SCRIPT.JS"></script>
+</body>
+
+</html>
