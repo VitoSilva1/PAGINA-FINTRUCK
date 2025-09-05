@@ -33,7 +33,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 380px;
+
     width: 40%;
 }
 
@@ -82,26 +82,9 @@ main {
     flex: 1;
 }
 
-/* ul li {
-    float: left;
-} */
-
-/* ul li a {
-    display: block;
-    color: darkblue;
-    text-align: center;
-    padding: 20px;
-    text-decoration: none;
+.crear {
+    width: 20%;
 }
-
-ul li a:hover {
-    background-color: darkblue;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-} */
-
-
 
 .crear ul {
     list-style-type: none;
@@ -110,12 +93,10 @@ ul li a:hover {
     overflow: hidden;
     background-color: #f6f1f1;
     text-align: center;
-    justify-content: center;
 
 }
 
 .crear ul li a {
-    display: block;
     color: darkblue;
     text-align: center;
     padding: 20px;
