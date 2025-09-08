@@ -7,7 +7,7 @@ Este proyecto fue desarrollado como parte de una evaluación académica, cumplie
 
 ## 🚀 Características principales
 - ✅ Estructura HTML5 semántica (`<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<footer>`).
-- ✅ Estilos consistentes con **CSS externo**.
+- ✅ Estilos consistentes con **Bootstrap**.
 - ✅ Formularios interactivos con **validación en JavaScript**.
 - ✅ Navegación fluida entre páginas mediante hipervínculos.
 - ✅ Inclusión de **imágenes, botones, video embebido y footer informativo**.
@@ -18,22 +18,20 @@ Este proyecto fue desarrollado como parte de una evaluación académica, cumplie
 ## 📂 Estructura del Proyecto
 fin-track/
 │── index.html # Página principal
-│── about.html # Información sobre el proyecto/equipo
-│── contact.html # Página de contacto con formulario validado
-│── dashboard.html # Vista simulada de panel financiero
+│── login.html # Información sobre el proyecto/equipo
+│── register.html # Página de contacto con formulario validado
+│── contact.html # Vista simulada de panel financiero
 │
-│── css/
-│ └── style.css # Estilos principales del sitio
 │
-│── js/
-│ └── scripts.js # Validaciones y lógica en JavaScript
+│── sctipts/
+│ └── script.js # Validaciones y lógica en JavaScript
 │
-│── img/
-│ ├── logo.png # Logo de Fin-Track
-│ └── banner.jpg # Imagen de portada
+│── assets/
+│ ├── img/
+│     └── imagen.png # imagen de portada
+│ ├── video/
+│     └── video.mp4 # video de portada
 │
-│── videos/
-│ └── intro.mp4 # Video explicativo embebido en la web
 
 
 ---
@@ -46,31 +44,13 @@ fin-track/
 - Video introductorio embebido.
 - Artículo destacado con consejos financieros.
 
-### `about.html` (Sobre Nosotros)
-- Información del equipo y objetivos del proyecto.
-- Explicación de la utilidad de la aplicación.
-
 ### `contact.html` (Contacto)
 - Formulario interactivo con validación en **JS**:
   - Campos requeridos (`nombre`, `email`, `mensaje`).
   - Validaciones con mensajes de error claros.
 - Footer con información de contacto.
 
-### `dashboard.html` (Dashboard de ejemplo)
-- Simulación de panel financiero.
-- Ejemplo de cómo se visualizarían **gráficas y datos de usuario**.
 
----
-
-## 🎨 Estilos (CSS)
-- Uso de una **hoja de estilos externa** (`style.css`).
-- Paleta de colores básicos:
-  - Azul (#004080, #007bff, #0056b3).
-  - Tonos grises (#f5f5f5, #333, #222).
-- Botones con `hover`.
-- Footer consistente en todas las páginas.
-
----
 
 ## ⚙️ Validación de Formularios (JavaScript)
 En `scripts.js` se implementaron validaciones para:
@@ -103,3 +83,4 @@ Este proyecto está diseñado para ser gestionado en un **repositorio de GitHub*
 
 ---
 ✨ *Desarrollado con HTML, CSS y JavaScript.*
+
