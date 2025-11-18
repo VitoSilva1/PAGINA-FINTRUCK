@@ -1,0 +1,16 @@
+.app main {
+  padding: 2rem 0;
+}
+
+.hero-section .lead {
+  max-width: 720px;
+  margin: 0 auto 1.5rem;
+}
+
+.video-wrapper video {
+  object-fit: cover;
+}
+
+.card-title {
+  font-weight: 600;
+}
