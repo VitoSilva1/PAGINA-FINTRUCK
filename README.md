@@ -1,79 +1,58 @@
 # 📊 Fin-Track
 
-**Fin-Track** es una aplicación web educativa para la gestión financiera personal.  
-Este proyecto fue desarrollado como parte de una evaluación académica, cumpliendo con los requisitos de **HTML5**, **CSS3** y **JavaScript**, además de las buenas prácticas de trabajo colaborativo en repositorios.
+Aplicación web educativa para la gestión financiera personal. Ahora el frontend está construido con **React + Vite**, reutilizando los contenidos que antes vivían en HTML estático.
 
 ---
 
-## 🚀 Características principales
-- ✅ Estructura HTML5 semántica (`<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<footer>`).
-- ✅ Estilos consistentes con **Bootstrap**.
-- ✅ Formularios interactivos con **validación en JavaScript**.
-- ✅ Navegación fluida entre páginas mediante hipervínculos.
-- ✅ Inclusión de **imágenes, botones, video embebido y footer informativo**.
-- ✅ Preparado para trabajo en equipo mediante **Git y GitHub**.
+## 🚀 Características
+- Routing cliente con `react-router-dom` y una navegación consistente (inicio, contacto, planes, gastos, perfil, login y registro).
+- Componentes reutilizables para el encabezado y el pie de página con estilos de **Bootstrap 5**.
+- Formularios de autenticación conectados a la API (`/users/login` y `/users/register`) mediante `fetch` y variables de entorno.
+- Formulario de contacto con feedback inmediato y un pequeño registro de gastos en memoria para practicar presupuestos.
+- Sección de perfil que utiliza el token guardado en `localStorage` y controles rápidos para cerrar sesión.
 
 ---
 
-## 📂 Estructura del Proyecto
-fin-track/
-│── index.html # Página principal
-│── login.html # Información sobre el proyecto/equipo
-│── register.html # Página de contacto con formulario validado
-│── contact.html # Vista simulada de panel financiero
-│
-│
-│── sctipts/
-│ └── script.js # Validaciones y lógica en JavaScript
-│
-│── assets/
-│ ├── img/
-│     └── imagen.png # imagen de portada
-│ ├── video/
-│     └── video.mp4 # video de portada
-│
-
+## 🧱 Estructura del proyecto
+```
+FrontendFintTrack/
+├── app/                 # Proyecto React (Vite)
+│   ├── package.json
+│   ├── src/
+│   │   ├── components/  # Navbar y Footer
+│   │   ├── pages/       # Vistas: Home, Contact, Login, etc.
+│   │   └── services/    # Consumo de la API (login y register)
+│   └── public/
+├── assets/              # Recursos originales (legacy)
+├── *.html               # Versiones estáticas anteriores (referencia)
+└── README.md
+```
+Las páginas HTML antiguas se conservan únicamente como respaldo/referencia; toda la nueva funcionalidad se sirve desde `app/`.
 
 ---
 
-## 🖥️ Páginas del sitio
-
-### `index.html` (Inicio)
-- Presentación de **Fin-Track**.
-- Botón de acceso al **Dashboard**.
-- Video introductorio embebido.
-- Artículo destacado con consejos financieros.
-
-### `contact.html` (Contacto)
-- Formulario interactivo con validación en **JS**:
-  - Campos requeridos (`nombre`, `email`, `mensaje`).
-  - Validaciones con mensajes de error claros.
-- Footer con información de contacto.
-
-
-
-## ⚙️ Validación de Formularios (JavaScript)
-En `scripts.js` se implementaron validaciones para:
-- Nombre con mínimo de 3 caracteres.
-- Correo con formato válido.
-- Mensaje con mínimo de 10 caracteres.
-- Prevención de envío de datos incorrectos.
-- Mensajes de error dinámicos y visibles en el contexto del formulario.
+## 🛠️ Cómo ejecutar el frontend React
+1. Instala las dependencias (solo la primera vez):
+   ```bash
+   cd app
+   npm install
+   ```
+2. Copia el archivo de variables de entorno y ajusta la URL de la API si es necesario:
+   ```bash
+   cp .env.example .env   # editar VITE_API_BASE_URL si corresponde
+   ```
+3. Inicia el entorno de desarrollo:
+   ```bash
+   npm run dev
+   ```
+   La aplicación quedará disponible en `http://localhost:5173/` (por defecto).
 
 ---
 
-## 🤝 Trabajo Colaborativo
-Este proyecto está diseñado para ser gestionado en un **repositorio de GitHub**:
-- Commits con mensajes claros y descriptivos.
-- Distribución de tareas por integrantes.
-- Integración continua de cambios al repositorio.
-
----
-
-## 📌 Requisitos técnicos
-- Navegador actualizado compatible con **HTML5**, **CSS3** y **JavaScript**.
-- Reproductor de video embebido habilitado.
-- Git instalado para trabajo colaborativo.
+## 🌐 Variables de entorno
+| Variable             | Descripción                                   | Valor por defecto           |
+|----------------------|-----------------------------------------------|-----------------------------|
+| `VITE_API_BASE_URL`  | URL base de la API FastAPI/Django/etc.        | `http://localhost:8000`     |
 
 ---
 
@@ -82,5 +61,4 @@ Este proyecto está diseñado para ser gestionado en un **repositorio de GitHub*
 ✉️ info@fintrack.com
 
 ---
-✨ *Desarrollado con HTML, CSS y JavaScript.*
-
+✨ *Desarrollado con React, Vite y Bootstrap.*
