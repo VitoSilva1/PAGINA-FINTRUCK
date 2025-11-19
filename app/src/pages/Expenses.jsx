@@ -1,172 +1,186 @@
-import { useMemo, useState } from 'react';
+import React, { useState } from "react";
 
-const categories = ['Hogar', 'Alimentación', 'Transporte', 'Educación', 'Entretenimiento', 'Otros'];
+const expenseTypes = [
+  "Servicios básicos",
+  "Supermercado",
+  "Tarjetas de crédito",
+  "Deudas bancarias",
+  "Otras deudas"
+];
 
-const Expenses = () => {
-  const [formValues, setFormValues] = useState({
-    description: '',
-    amount: '',
-    category: categories[0],
-    date: ''
-  });
-  const [expenses, setExpenses] = useState([]);
+export default function ExpensesRedesign() {
+  const makeId = () =>
+    typeof crypto !== "undefined" && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.floor(Math.random() * 100000)}`;
 
-  const totalSpent = useMemo(
-    () => expenses.reduce((acc, expense) => acc + Number(expense.amount || 0), 0),
-    [expenses]
+  const basicServices = [
+    "Luz",
+    "Agua",
+    "Tv-Cable",
+    "Internet",
+    "Teléfono",
+    "Tv + Internet",
+    "Tv + Internet + Teléfono",
+    "Gas"
+  ];
+
+  const [selectedType, setSelectedType] = useState("");
+  const [rows, setRows] = useState([
+    { id: makeId(), name: "", amount: 0, quantity: 1, installments: 1 }
+  ]);
+
+  const isBasicService = selectedType === "Servicios básicos";
+  const isSupermarket = selectedType === "Supermercado";
+
+  const total = rows.reduce(
+    (acc, row) => acc + Number(row.amount || 0) * Number(row.quantity || 1),
+    0
   );
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormValues((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (id, field, value) => {
+    setRows((prev) =>
+      prev.map((row) =>
+        row.id === id
+          ? {
+            ...row,
+            [field]: field === "name" ? value : Number(value || 0)
+          }
+          : row
+      )
+    );
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!formValues.description || !formValues.amount) return;
-
-    setExpenses((prev) => [
+  const addRow = () => {
+    setRows((prev) => [
       ...prev,
-      {
-        ...formValues,
-        id: crypto.randomUUID()
-      }
+      { id: makeId(), name: "", amount: 0, quantity: 1, installments: 1 }
     ]);
-
-    setFormValues((prev) => ({ ...prev, description: '', amount: '', date: '' }));
   };
 
-  const handleClear = () => setExpenses([]);
+  const removeRow = (id) => {
+    setRows((prev) => prev.filter((r) => r.id !== id));
+  };
 
   return (
-    <section className="container py-5">
-      <div className="row g-4">
-        <div className="col-lg-5">
-          <div className="card shadow-sm h-100">
-            <div className="card-body">
-              <h2 className="card-title h4 mb-4">Registrar gasto</h2>
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="description">
-                    Descripción
-                  </label>
-                  <input
-                    className="form-control"
-                    id="description"
-                    name="description"
-                    placeholder="Ej: Pago de arriendo"
-                    required
-                    type="text"
-                    value={formValues.description}
-                    onChange={handleChange}
-                  />
-                </div>
+    <div className="container py-5">
+      <h1 className="text-center fw-bold mb-4">Registro de Gastos</h1>
 
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="amount">
-                    Monto
-                  </label>
-                  <input
-                    className="form-control"
-                    id="amount"
-                    min="0"
-                    name="amount"
-                    placeholder="0"
-                    required
-                    type="number"
-                    value={formValues.amount}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="category">
-                    Categoría
-                  </label>
-                  <select
-                    className="form-select"
-                    id="category"
-                    name="category"
-                    value={formValues.category}
-                    onChange={handleChange}
-                  >
-                    {categories.map((category) => (
-                      <option key={category} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="mb-4">
-                  <label className="form-label" htmlFor="date">
-                    Fecha
-                  </label>
-                  <input
-                    className="form-control"
-                    id="date"
-                    name="date"
-                    type="date"
-                    value={formValues.date}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="d-grid gap-2">
-                  <button className="btn btn-info text-white" type="submit">
-                    Agregar gasto
-                  </button>
-                  <button className="btn btn-outline-secondary" type="button" onClick={handleClear}>
-                    Limpiar lista
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-lg-7">
-          <div className="card shadow-sm h-100">
-            <div className="card-body d-flex flex-column">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <h2 className="card-title h4 mb-0">Gastos registrados</h2>
-                <span className="badge bg-info text-dark fs-6">
-                  Total: ${totalSpent.toLocaleString('es-CL')}
-                </span>
-              </div>
-
-              {expenses.length === 0 ? (
-                <p className="text-muted mb-0">Aún no registras gastos. ¡Comienza agregando el primero!</p>
-              ) : (
-                <div className="table-responsive">
-                  <table className="table table-hover align-middle">
-                    <thead>
-                      <tr>
-                        <th>Descripción</th>
-                        <th>Categoría</th>
-                        <th>Fecha</th>
-                        <th className="text-end">Monto</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {expenses.map((expense) => (
-                        <tr key={expense.id}>
-                          <td>{expense.description}</td>
-                          <td>{expense.category}</td>
-                          <td>{expense.date ? new Date(expense.date).toLocaleDateString('es-CL') : '-'}</td>
-                          <td className="text-end">${Number(expense.amount).toLocaleString('es-CL')}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+      <div className="mb-4">
+        <label className="form-label fw-semibold">Selecciona el tipo de gasto</label>
+        <select
+          className="form-select shadow-sm"
+          value={selectedType}
+          onChange={(e) => setSelectedType(e.target.value)}
+        >
+          <option value="">-- Selecciona una opción --</option>
+          {expenseTypes.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
+        </select>
       </div>
-    </section>
-  );
-};
 
-export default Expenses;
+      {selectedType && (
+        <div className="card shadow-lg border-0 mb-5">
+          <div className="card-body p-4">
+            <h2 className="h4 text-primary fw-bold mb-3">{selectedType}</h2>
+
+            <div className="row mb-2 fw-semibold text-secondary px-2 gx-2">
+              <div className="col-12 col-lg-4">Gasto</div>
+              <div className="col-6 col-lg-2">Precio</div>
+              {!isBasicService && (
+                <div className="col-4 col-lg-2">Cantidad</div>
+              )}
+              {!isSupermarket && (
+                <div className="col-4 col-lg-2">Cuotas</div>
+              )}
+              <div className="col-2 d-none d-lg-block">Acción</div>
+            </div>
+
+            <div className="d-flex flex-column gap-2">
+              {rows.map((row) => (
+                <div key={row.id} className="row g-2 align-items-center p-1">
+
+                  <div className="col-12 col-lg-4">
+                    {isBasicService ? (
+                      <select
+                        className="form-select"
+                        value={row.name}
+                        onChange={(e) => handleChange(row.id, "name", e.target.value)}
+                      >
+                        <option value="">Seleccionar servicio…</option>
+                        {basicServices.map((s) => (
+                          <option key={s} value={s}>{s}</option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Ej: producto, deuda…"
+                        value={row.name}
+                        onChange={(e) => handleChange(row.id, "name", e.target.value)}
+                      />
+                    )}
+                  </div>
+
+                  <div className="col-6 col-lg-2">
+                    <div className="input-group">
+                      <span className="input-group-text">$</span>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={row.amount}
+                        placeholder="0"
+                        onChange={(e) => handleChange(row.id, "amount", e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  {!isBasicService && (
+                    <div className="col-4 col-lg-2">
+                      <input
+                        type="number"
+                        min="1"
+                        className="form-control"
+                        value={row.quantity}
+                        onChange={(e) => handleChange(row.id, "quantity", e.target.value)}
+                      />
+                    </div>
+                  )}
+
+                  {!isSupermarket && (
+                    <div className="col-4 col-lg-2">
+                      <input
+                        type="number"
+                        min="1"
+                        disabled={isBasicService}
+                        className="form-control"
+                        value={row.installments}
+                        onChange={(e) => handleChange(row.id, "installments", e.target.value)}
+                      />
+                    </div>
+                  )}
+
+                  <div className="col-2 d-flex gap-2">
+                    <button className="btn btn-secondary  w-50" onClick={addRow}>+</button>
+                    {rows.length > 1 && (
+                      <button className="btn btn-danger w-100" onClick={() => removeRow(row.id)}>−</button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4 p-3 bg-primary bg-opacity-10 rounded-3 d-flex justify-content-between align-items-center shadow-sm">
+              <span className="fw-semibold fs-5">Total:</span>
+              <span className="fs-3 fw-bold text-primary">${total.toLocaleString("es-CL")}</span>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
