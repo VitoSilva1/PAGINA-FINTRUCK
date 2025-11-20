@@ -61,6 +61,25 @@ export default function ExpensesRedesign() {
   const removeRow = (id) => {
     setRows((prev) => prev.filter((r) => r.id !== id));
   };
+  const guardarGasto = () => {
+    const gastosObj = {};
+
+    rows.forEach(row => {
+      if (!row.name || !row.amount) return;
+
+      gastosObj[row.name] = {
+        monto: row.amount,
+        cantidad: row.quantity || 1,
+        cuotas: row.installments || 1,
+        total: row.amount * (row.quantity || 1)
+      };
+    });
+
+    console.log("JSON generado:", gastosObj);
+
+    return gastosObj;
+  };
+
 
   return (
     <div className="container py-5">
@@ -93,7 +112,7 @@ export default function ExpensesRedesign() {
               {!isBasicService && (
                 <div className="col-4 col-lg-2">Cantidad</div>
               )}
-              {!isSupermarket && (
+              {!isSupermarket || !isBasicService && (
                 <div className="col-4 col-lg-2">Cuotas</div>
               )}
               <div className="col-2 d-none d-lg-block">Acción</div>
@@ -132,7 +151,7 @@ export default function ExpensesRedesign() {
                       <input
                         type="number"
                         className="form-control"
-                        value={row.amount}
+                        // value={row.amount}
                         placeholder="0"
                         onChange={(e) => handleChange(row.id, "amount", e.target.value)}
                       />
@@ -143,7 +162,7 @@ export default function ExpensesRedesign() {
                     <div className="col-4 col-lg-2">
                       <input
                         type="number"
-                        min="1"
+                        min="0"
                         className="form-control"
                         value={row.quantity}
                         onChange={(e) => handleChange(row.id, "quantity", e.target.value)}
@@ -151,7 +170,7 @@ export default function ExpensesRedesign() {
                     </div>
                   )}
 
-                  {!isSupermarket && (
+                  {!isSupermarket || !isBasicService && (
                     <div className="col-4 col-lg-2">
                       <input
                         type="number"
@@ -173,11 +192,26 @@ export default function ExpensesRedesign() {
                 </div>
               ))}
             </div>
+            <div className="mt-4 d-flex justify-content-between align-items-center">
 
-            <div className="mt-4 p-3 bg-primary bg-opacity-10 rounded-3 d-flex justify-content-between align-items-center shadow-sm">
-              <span className="fw-semibold fs-5">Total:</span>
-              <span className="fs-3 fw-bold text-primary">${total.toLocaleString("es-CL")}</span>
+              {/* Primer div = 80% */}
+              <div className="p-2 bg-primary bg-opacity-10 rounded-3 d-flex justify-content-between align-items-center shadow-sm flex-grow-1" style={{ width: "80%" }}>
+                <span className="fw-semibold fs-5">Total:</span>
+                <span className="fs-3 fw-bold text-primary">${total.toLocaleString("es-CL")}</span>
+              </div>
+
+              {/* Segundo div = 15% */}
+              <div className="m-3 bg-primary bg-opacity-10 rounded-3 d-flex justify-content-between align-items-center shadow-sm" style={{ width: "15%" }}>
+                <button
+                  className="p-3 btn btn-primary fw-semibold w-100"
+                  onClick={guardarGasto} // <-- tu función aquí
+                >
+                  Guardar gasto
+                </button>
+              </div>
+
             </div>
+
           </div>
         </div>
       )}
