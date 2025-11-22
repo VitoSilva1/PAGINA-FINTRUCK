@@ -61,7 +61,7 @@ export default function ExpensesRedesign() {
   const removeRow = (id) => {
     setRows((prev) => prev.filter((r) => r.id !== id));
   };
-  const guardarGasto = () => {
+  const gastoGenerado = () => {
     const gastosObj = {};
 
     rows.forEach(row => {
@@ -80,6 +80,31 @@ export default function ExpensesRedesign() {
     return gastosObj;
   };
 
+
+  const enviarGastos = async (gastos) => { // gastos es el objeto generado en guardarGasto
+    try {
+      const body = typeof gastos === 'string' ? gastos : JSON.stringify(gastos);
+      const response = await fetch('URL de la api ', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body, // Convertir el objeto de gastos a JSON
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al enviar los gastos');
+      }
+
+      const data = await response.json();
+      console.log('Respuesta de la API:', data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  const guardarGasto = () => {
+    enviarGastos(gastoGenerado);
+  };
 
   return (
     <div className="container py-5">
@@ -194,17 +219,15 @@ export default function ExpensesRedesign() {
             </div>
             <div className="mt-4 d-flex justify-content-between align-items-center">
 
-              {/* Primer div = 80% */}
               <div className="p-2 bg-primary bg-opacity-10 rounded-3 d-flex justify-content-between align-items-center shadow-sm flex-grow-1" style={{ width: "80%" }}>
                 <span className="fw-semibold fs-5">Total:</span>
                 <span className="fs-3 fw-bold text-primary">${total.toLocaleString("es-CL")}</span>
               </div>
 
-              {/* Segundo div = 15% */}
               <div className="m-3 bg-primary bg-opacity-10 rounded-3 d-flex justify-content-between align-items-center shadow-sm" style={{ width: "15%" }}>
                 <button
                   className="p-3 btn btn-primary fw-semibold w-100"
-                  onClick={guardarGasto} // <-- tu función aquí
+                  onClick={guardarGasto} 
                 >
                   Guardar gasto
                 </button>
