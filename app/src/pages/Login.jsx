@@ -16,7 +16,10 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!formValues.email || !formValues.password) {
+    const emailTrimmed = formValues.email.trim();
+    const passwordTrimmed = formValues.password;
+
+    if (!emailTrimmed || !passwordTrimmed) {
       setStatus({ type: 'danger', message: 'Por favor ingresa tu correo y contraseña.' });
       return;
     }
@@ -24,15 +27,16 @@ const Login = () => {
     try {
       setIsSubmitting(true);
       setStatus(null);
-      const result = await loginUser(formValues.email, formValues.password);
+      const result = await loginUser(emailTrimmed, passwordTrimmed);
 
       localStorage.setItem('fintrackAccessToken', result.access_token);
-      localStorage.setItem('fintrackUserEmail', formValues.email);
+      localStorage.setItem('fintrackUserEmail', emailTrimmed);
 
       setStatus({ type: 'success', message: 'Bienvenido, has iniciado sesión.' });
-      setTimeout(() => navigate('/profile'), 1100);
+      setTimeout(() => navigate('/profile'), 1500);
     } catch (error) {
-      setStatus({ type: 'danger', message: error.message || 'Correo o contraseña incorrectos.' });
+      const errorMessage = error.message || 'Correo o contraseña incorrectos.';
+      setStatus({ type: 'danger', message: errorMessage });
     } finally {
       setIsSubmitting(false);
     }
