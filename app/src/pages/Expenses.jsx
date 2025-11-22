@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { enviarGastos } from "../services/expenses";
 
 const expenseTypes = [
   "Servicios básicos",
@@ -80,28 +81,6 @@ export default function ExpensesRedesign() {
     return gastosObj;
   };
 
-
-  const enviarGastos = async (gastos) => { // gastos es el objeto generado en guardarGasto
-    try {
-      const body = typeof gastos === 'string' ? gastos : JSON.stringify(gastos);
-      const response = await fetch('URL de la api ', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body, // Convertir el objeto de gastos a JSON
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al enviar los gastos');
-      }
-
-      const data = await response.json();
-      console.log('Respuesta de la API:', data);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
   const guardarGasto = () => {
     enviarGastos(gastoGenerado);
   };
@@ -227,7 +206,7 @@ export default function ExpensesRedesign() {
               <div className="m-3 bg-primary bg-opacity-10 rounded-3 d-flex justify-content-between align-items-center shadow-sm" style={{ width: "15%" }}>
                 <button
                   className="p-3 btn btn-primary fw-semibold w-100"
-                  onClick={guardarGasto} 
+                  onClick={guardarGasto}
                 >
                   Guardar gasto
                 </button>
