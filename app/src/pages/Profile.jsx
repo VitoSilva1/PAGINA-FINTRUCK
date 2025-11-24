@@ -20,6 +20,7 @@ const Profile = () => {
   const handleLogout = () => {
     localStorage.removeItem('fintrackAccessToken');
     localStorage.removeItem('fintrackUserEmail');
+    localStorage.removeItem('fintrackUserId');
     navigate('/');
   };
 

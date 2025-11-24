@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { loginUser } from '../services/auth';
+import { decodeAccessToken, loginUser } from '../services/auth';
 
 const Login = () => {
   const [formValues, setFormValues] = useState({ email: '', password: '' });
@@ -31,6 +31,12 @@ const Login = () => {
 
       localStorage.setItem('fintrackAccessToken', result.access_token);
       localStorage.setItem('fintrackUserEmail', emailTrimmed);
+      const decodedToken = decodeAccessToken(result.access_token);
+      if (decodedToken?.sub) {
+        localStorage.setItem('fintrackUserId', decodedToken.sub);
+      } else {
+        localStorage.removeItem('fintrackUserId');
+      }
 
       setStatus({ type: 'success', message: 'Bienvenido, has iniciado sesión.' });
       setTimeout(() => navigate('/profile'), 1500);

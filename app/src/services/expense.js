@@ -13,25 +13,23 @@ const API_EXPENSE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8
 // };
 
 const enviarGastos = async (gastos) => { // gastos es el objeto generado en guardarGasto
-    try {
-        const body = typeof gastos === 'string' ? gastos : JSON.stringify(gastos);
-        const response = await fetch(`${API_EXPENSE_URL}/expenses/bulk`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body, // Convertir el objeto de gastos a JSON
-        });
+    const body = typeof gastos === 'string' ? gastos : JSON.stringify(gastos);
+    const response = await fetch(`${API_EXPENSE_URL}/expenses/bulk`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body, // Convertir el objeto de gastos a JSON
+    });
 
-        if (!response.ok) {
-            throw new Error('Error al enviar los gastos');
-        }
+    const data = await response.json().catch(() => null);
 
-        const data = await response.json();
-        console.log('Respuesta de la API:', data);
-    } catch (error) {
-        console.error('Error:', error);
+    if (!response.ok) {
+        const detail = data?.detail || 'Error al enviar los gastos';
+        throw new Error(detail);
     }
+
+    return data;
 };
 
 export { enviarGastos };

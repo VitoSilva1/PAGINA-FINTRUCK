@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { enviarGastos } from "../services/expenses";
+import React, { useEffect, useState } from "react";
+import { enviarGastos } from "../services/expense";
 
 const expenseTypes = [
   "Servicios básicos",
@@ -27,9 +27,28 @@ export default function ExpensesRedesign() {
   ];
 
   const [selectedType, setSelectedType] = useState("");
+  const [userId, setUserId] = useState(() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+    const storedId = window.localStorage.getItem("fintrackUserId");
+    return storedId ? Number(storedId) : null;
+  });
   const [rows, setRows] = useState([
     { id: makeId(), name: "", amount: 0, quantity: 1, installments: 1 }
   ]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+    const syncUserId = () => {
+      const storedId = window.localStorage.getItem("fintrackUserId");
+      setUserId(storedId ? Number(storedId) : null);
+    };
+    window.addEventListener("storage", syncUserId);
+    return () => window.removeEventListener("storage", syncUserId);
+  }, []);
 
   const isBasicService = selectedType === "Servicios básicos";
   const isSupermarket = selectedType === "Supermercado";
@@ -62,29 +81,46 @@ export default function ExpensesRedesign() {
   const removeRow = (id) => {
     setRows((prev) => prev.filter((r) => r.id !== id));
   };
-  const gastoGenerado = () => {
-    const gastosObj = {};
+  const buildExpensePayload = () => {
+    const items = rows
+      .filter((row) => row.name && row.amount)
+      .map((row) => ({
+        name: row.name,
+        monto: Number(row.amount),
+        cantidad: Number(row.quantity || 1),
+        cuotas: Number(row.installments || 1),
+        total: Number(row.amount) * Number(row.quantity || 1)
+      }));
 
-    rows.forEach(row => {
-      if (!row.name || !row.amount) return;
+    if (!selectedType || !items.length || !userId) {
+      return null;
+    }
 
-      gastosObj[row.name] = {
-        monto: row.amount,
-        cantidad: row.quantity || 1,
-        cuotas: row.installments || 1,
-        total: row.amount * (row.quantity || 1)
-      };
-    });
-
-    console.log("JSON generado:", gastosObj);
-
-    return gastosObj;
+    return {
+      user_id: Number(userId),
+      category_label: selectedType,
+      items
+    };
   };
 
-  const guardarGasto = () => {
-    enviarGastos(gastoGenerado);
+  const guardarGasto = async () => {
+    if (!userId) {
+      alert("Debes iniciar sesión para registrar tus gastos.");
+      return;
+    }
+    const payload = buildExpensePayload();
+    if (!payload) {
+      alert("Completa al menos un gasto antes de guardar.");
+      return;
+    }
+    try {
+      await enviarGastos(payload);
+      alert("Gastos enviados correctamente.");
+    } catch (error) {
+      console.error("Error al enviar gastos:", error);
+      alert(error.message || "Ocurrió un error al guardar los gastos.");
+    }
   };
-
   return (
     <div className="container py-5">
       <h1 className="text-center fw-bold mb-4">Registro de Gastos</h1>
@@ -155,7 +191,7 @@ export default function ExpensesRedesign() {
                       <input
                         type="number"
                         className="form-control"
-                        // value={row.amount}
+                        value={row.amount}
                         placeholder="0"
                         onChange={(e) => handleChange(row.id, "amount", e.target.value)}
                       />
