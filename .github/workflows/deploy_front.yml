@@ -20,14 +20,17 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
+        working-directory: ./app
         run: npm i
 
       - name: Run tests (optional)
+        working-directory: ./app
         run: |
           echo "Running tests..."
           npm test --if-present
 
       - name: Build project
+        working-directory: ./app
         run: npm run build
 
       - name: Deploy to Render
