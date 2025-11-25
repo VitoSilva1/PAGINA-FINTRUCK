@@ -1,12 +1,16 @@
+// src/pages/Login.jsx
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { decodeAccessToken, loginUser } from '../services/auth';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const [formValues, setFormValues] = useState({ email: '', password: '' });
   const [status, setStatus] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  const { login } = useAuth();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -27,19 +31,25 @@ const Login = () => {
     try {
       setIsSubmitting(true);
       setStatus(null);
+
       const result = await loginUser(emailTrimmed, passwordTrimmed);
 
+      // Guardar token
       localStorage.setItem('fintrackAccessToken', result.access_token);
       localStorage.setItem('fintrackUserEmail', emailTrimmed);
+
+      // Guardar userId del token
       const decodedToken = decodeAccessToken(result.access_token);
       if (decodedToken?.sub) {
         localStorage.setItem('fintrackUserId', decodedToken.sub);
-      } else {
-        localStorage.removeItem('fintrackUserId');
       }
 
-      setStatus({ type: 'success', message: 'Bienvenido, has iniciado sesión.' });
-      setTimeout(() => navigate('/profile'), 1500);
+      // Cambiar estado global
+      login();
+
+      // Redirigir
+      navigate('/profile', { replace: true });
+
     } catch (error) {
       const errorMessage = error.message || 'Correo o contraseña incorrectos.';
       setStatus({ type: 'danger', message: errorMessage });
@@ -51,6 +61,7 @@ const Login = () => {
   return (
     <section className="container py-5">
       <h1 className="text-center mb-4">Iniciar Sesión</h1>
+
       <form
         className="p-4 shadow rounded bg-light mx-auto"
         style={{ maxWidth: 420 }}
@@ -58,40 +69,34 @@ const Login = () => {
         noValidate
       >
         <div className="mb-3">
-          <label className="form-label" htmlFor="email">
-            Correo Electrónico
-          </label>
+          <label className="form-label">Correo Electrónico</label>
           <input
             autoComplete="email"
             className="form-control"
-            id="email"
             name="email"
-            placeholder="tucorreo@ejemplo.com"
-            required
             type="email"
+            placeholder="tucorreo@ejemplo.com"
             value={formValues.email}
             onChange={handleChange}
+            required
           />
         </div>
 
         <div className="mb-3">
-          <label className="form-label" htmlFor="password">
-            Contraseña
-          </label>
+          <label className="form-label">Contraseña</label>
           <input
             className="form-control"
-            id="password"
             name="password"
-            placeholder="••••••••"
-            required
             type="password"
+            placeholder="••••••••"
             value={formValues.password}
             onChange={handleChange}
+            required
           />
         </div>
 
         <div className="d-grid">
-          <button className="btn btn-info text-white" disabled={isSubmitting} type="submit">
+          <button className="btn btn-info text-white" type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Ingresando...' : 'Iniciar Sesión'}
           </button>
         </div>

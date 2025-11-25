@@ -1,16 +1,9 @@
 import { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import Contact from './pages/Contact';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Subscription from './pages/Subscription';
-import Expenses from './pages/Expenses';
-import Profile from './pages/Profile';
-import NotFound from './pages/NotFound';
+import AppRoutes from './routes/AppRoutes';
 
 const ScrollToAnchor = () => {
   const location = useLocation();
@@ -39,16 +32,7 @@ function App() {
       <ScrollToAnchor />
 
       <main className="flex-fill">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/subscription" element={<Subscription />} />
-          <Route path="/expenses" element={<Expenses />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AppRoutes />
       </main>
 
       <Footer />
