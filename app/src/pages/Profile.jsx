@@ -22,6 +22,7 @@ const Profile = () => {
     localStorage.removeItem('fintrackUserEmail');
     localStorage.removeItem('fintrackUserId');
     navigate('/');
+    setIsLogged(false);
   };
 
   if (!token) {
