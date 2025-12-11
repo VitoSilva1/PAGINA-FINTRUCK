@@ -1,4 +1,12 @@
-const API_AUTH_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API_AUTH_URL =
+  import.meta.env.VITE_AUTH_SERVICE_URL ||
+  import.meta.env.VITE_API_BASE_URL ||
+  'http://localhost:8001';
+
+const API_USER_URL =
+  import.meta.env.VITE_USER_SERVICE_URL ||
+  import.meta.env.VITE_API_BASE_URL ||
+  'http://localhost:8000';
 
 const parseResponse = async (response) => {
   const body = await response.json().catch(() => ({}));
@@ -44,7 +52,7 @@ export const decodeAccessToken = (token) => {
 };
 
 export const loginUser = async (email, password) => {
-  const response = await fetch(`${API_AUTH_URL}/users/login`, {
+  const response = await fetch(`${API_AUTH_URL}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password })
@@ -54,7 +62,7 @@ export const loginUser = async (email, password) => {
 };
 
 export const registerUser = async ({ firstName, lastName, email, password }) => {
-  const response = await fetch(`${API_AUTH_URL}/users/register`, {
+  const response = await fetch(`${API_USER_URL}/users/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
