@@ -1,16 +1,42 @@
-# React + Vite
+# Frontend React (Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación SPA de **Fintruck** construida con React 19 + Vite. Consume los microservicios de autenticación, usuarios, ingresos y gastos, y centraliza la navegación entre las vistas principales (inicio, contacto, login, registro, gastos, perfil, etc.).
 
-Currently, two official plugins are available:
+## Scripts disponibles
+```bash
+npm run dev          # Servidor de desarrollo (http://localhost:5173)
+npm run build        # Build para producción (carpeta dist/)
+npm run preview      # Sirve el build resultante
+npm run lint         # Ejecuta ESLint
+npm run test         # Corre la suite de Vitest una vez
+npm run test:watch   # Corre Vitest en modo interactivo/watch
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Estructura relevante (`src/`)
+- `pages/`: vistas principales (`Home`, `Login`, `Register`, `Expenses`, etc.).
+- `components/`: Navbar, Footer y piezas reutilizables.
+- `context/AuthContext.jsx`: administra el estado global de autenticación (token en `localStorage`).
+- `services/`: wrappers `fetch` para `auth`, `users`, `expenses`, etc.
+- `routes/`: definición de rutas con `react-router-dom`.
 
-## React Compiler
+## Variables de entorno
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Variable | Descripción | Default |
+| --- | --- | --- |
+| `VITE_AUTH_SERVICE_URL` | URL directa del microservicio de autenticación (`ms-auth-service`). | `http://localhost:8001` |
+| `VITE_USER_SERVICE_URL` | URL del microservicio de usuarios (`ms-user-service`). | `http://localhost:8000` |
+| `VITE_API_BASE_URL` | Base común cuando los servicios comparten host. Se usa como fallback para las dos anteriores. | `http://localhost:8000` |
 
-## Expanding the ESLint configuration
+> Crea un archivo `.env` (o `.env.local`) copiando desde `.env.example` y ajusta las URLs según tus despliegues.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Pruebas
+Se utilizan **Vitest** y **@testing-library/react**. El archivo `src/context/AuthContext.test.jsx` valida el comportamiento del contexto de autenticación (rehidratación de sesión, login, logout). Para agregar nuevos tests solo crea archivos `*.test.jsx/tsx` dentro de `src/` y ejecuta:
+```bash
+npm run test
+```
+
+## Navegación básica
+El enrutador se define en `src/routes/AppRoutes.jsx` y está envuelto por `AuthProvider`. Las vistas protegidas pueden leer `isLogged` desde el contexto para redireccionar si el usuario no ha iniciado sesión.
+
+## Estilos
+El proyecto utiliza **Bootstrap 5** más estilos propios (`App.css`, `index.css`). También se incorporan iconos con `lucide-react`.
