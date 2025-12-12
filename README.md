@@ -47,6 +47,15 @@ Las páginas HTML antiguas se conservan únicamente como respaldo/referencia; to
    ```
    La aplicación quedará disponible en `http://localhost:5173/` (por defecto).
 
+### 🧪 Pruebas unitarias
+La aplicación React utiliza **Vitest** y **Testing Library** para los tests de UI y hooks:
+```bash
+cd app
+npm run test          # Ejecuta la suite una vez
+npm run test:watch    # Modo interactivo
+```
+El archivo `src/context/AuthContext.test.jsx` es un buen ejemplo para crear nuevas pruebas sobre componentes o servicios del frontend.
+
 ---
 
 ## 🌐 Variables de entorno
