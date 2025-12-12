@@ -75,3 +75,12 @@ export const registerUser = async ({ firstName, lastName, email, password }) => 
 
   return parseResponse(response);
 };
+
+export const getProfile = async (token) => {
+  const response = await fetch(`${API_USER_URL}/users/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  return parseResponse(response);
+};

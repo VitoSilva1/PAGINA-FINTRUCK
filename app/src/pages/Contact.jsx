@@ -52,7 +52,7 @@ const Contact = () => {
 
         <div className="mb-3">
           <label htmlFor="email" className="form-label fw-bold">
-            Correo Electrónico
+            Correo electrónico
           </label>
           <input
             className="form-control"

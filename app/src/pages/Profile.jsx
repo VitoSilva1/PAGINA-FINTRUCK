@@ -1,31 +1,52 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { getProfile } from '../services/auth';
+import { useAuth } from '../context/AuthContext';
 
 const quickStats = [
-  { label: 'Gastos del mes', description: 'Registra tus gastos para ver métricas.', icon: '💸' },
-  { label: 'Metas activas', description: 'Pronto podrás definir metas de ahorro.', icon: '🎯' },
-  { label: 'Alertas', description: 'Sin alertas por ahora.', icon: '🔔' }
+  { label: 'Gastos del mes', description: 'Registra tus gastos para ver métricas.' },
+  { label: 'Metas activas', description: 'Pronto podrás definir metas de ahorro.' },
+  { label: 'Alertas', description: 'Sin alertas por ahora.' }
 ];
 
 const Profile = () => {
   const [email, setEmail] = useState('');
-  const [token, setToken] = useState('');
+  const [profile, setProfile] = useState(null);
+  const [status, setStatus] = useState({ loading: true, error: '' });
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
-    setEmail(localStorage.getItem('fintrackUserEmail') || '');
-    setToken(localStorage.getItem('fintrackAccessToken') || '');
+    const token = localStorage.getItem('fintrackAccessToken') || '';
+    const storedEmail = localStorage.getItem('fintrackUserEmail') || '';
+    setEmail(storedEmail);
+
+    if (!token) {
+      setStatus({ loading: false, error: '' });
+      return;
+    }
+
+    const loadProfile = async () => {
+      try {
+        const data = await getProfile(token);
+        setProfile(data);
+        setStatus({ loading: false, error: '' });
+      } catch (error) {
+        setStatus({ loading: false, error: error.message || 'No se pudo cargar el perfil.' });
+      }
+    };
+
+    loadProfile();
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('fintrackAccessToken');
-    localStorage.removeItem('fintrackUserEmail');
-    localStorage.removeItem('fintrackUserId');
+    logout();
     navigate('/');
-    setIsLogged(false);
   };
 
-  if (!token) {
+  const hasSession = !!localStorage.getItem('fintrackAccessToken');
+
+  if (!hasSession) {
     return (
       <section className="container py-5 text-center">
         <h1 className="mb-3">Tu perfil</h1>
@@ -45,6 +66,11 @@ const Profile = () => {
         <div>
           <h1 className="mb-1">Bienvenido de nuevo</h1>
           <p className="text-muted mb-0">{email}</p>
+          {profile?.first_name && (
+            <p className="text-muted mb-0">
+              {profile.first_name} {profile.last_name || ''}
+            </p>
+          )}
         </div>
         <div className="d-flex gap-2">
           <Link className="btn btn-outline-info" to="/expenses">
@@ -56,13 +82,23 @@ const Profile = () => {
         </div>
       </div>
 
+      {status.loading && (
+        <div className="alert alert-info" role="status">
+          Cargando tu perfil...
+        </div>
+      )}
+      {status.error && (
+        <div className="alert alert-warning" role="alert">
+          {status.error}
+        </div>
+      )}
+
       <div className="row g-4">
         {quickStats.map((stat) => (
           <div className="col-md-4" key={stat.label}>
             <div className="card shadow-sm h-100">
               <div className="card-body">
-                <div className="display-6">{stat.icon}</div>
-                <h5 className="card-title mt-3">{stat.label}</h5>
+                <h5 className="card-title mt-1">{stat.label}</h5>
                 <p className="card-text text-muted">{stat.description}</p>
               </div>
             </div>

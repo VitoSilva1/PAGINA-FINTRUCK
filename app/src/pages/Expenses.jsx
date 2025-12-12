@@ -1,57 +1,58 @@
-import React, { useEffect, useState } from "react";
-import { enviarGastos } from "../services/expense";
+import React, { useEffect, useState } from 'react';
+import { enviarGastos } from '../services/expense';
 
 const expenseTypes = [
-  "Servicios básicos",
-  "Supermercado",
-  "Tarjetas de crédito",
-  "Deudas bancarias",
-  "Otras deudas"
+  'Servicios básicos',
+  'Supermercado',
+  'Tarjetas de crédito',
+  'Deudas bancarias',
+  'Otras deudas'
 ];
 
 export default function ExpensesRedesign() {
   const makeId = () =>
-    typeof crypto !== "undefined" && crypto.randomUUID
+    typeof crypto !== 'undefined' && crypto.randomUUID
       ? crypto.randomUUID()
       : `${Date.now()}-${Math.floor(Math.random() * 100000)}`;
 
   const basicServices = [
-    "Luz",
-    "Agua",
-    "Tv-Cable",
-    "Internet",
-    "Teléfono",
-    "Tv + Internet",
-    "Tv + Internet + Teléfono",
-    "Gas"
+    'Luz',
+    'Agua',
+    'Tv-Cable',
+    'Internet',
+    'Teléfono',
+    'Tv + Internet',
+    'Tv + Internet + Teléfono',
+    'Gas'
   ];
 
-  const [selectedType, setSelectedType] = useState("");
+  const [selectedType, setSelectedType] = useState('');
   const [userId, setUserId] = useState(() => {
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       return null;
     }
-    const storedId = window.localStorage.getItem("fintrackUserId");
+    const storedId = window.localStorage.getItem('fintrackUserId');
     return storedId ? Number(storedId) : null;
   });
   const [rows, setRows] = useState([
-    { id: makeId(), name: "", amount: 0, quantity: 1, installments: 1 }
+    { id: makeId(), name: '', amount: 0, quantity: 1, installments: 1 }
   ]);
+  const [feedback, setFeedback] = useState(null);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       return undefined;
     }
     const syncUserId = () => {
-      const storedId = window.localStorage.getItem("fintrackUserId");
+      const storedId = window.localStorage.getItem('fintrackUserId');
       setUserId(storedId ? Number(storedId) : null);
     };
-    window.addEventListener("storage", syncUserId);
-    return () => window.removeEventListener("storage", syncUserId);
+    window.addEventListener('storage', syncUserId);
+    return () => window.removeEventListener('storage', syncUserId);
   }, []);
 
-  const isBasicService = selectedType === "Servicios básicos";
-  const isSupermarket = selectedType === "Supermercado";
+  const isBasicService = selectedType === 'Servicios básicos';
+  const isSupermarket = selectedType === 'Supermercado';
 
   const total = rows.reduce(
     (acc, row) => acc + Number(row.amount || 0) * Number(row.quantity || 1),
@@ -63,9 +64,9 @@ export default function ExpensesRedesign() {
       prev.map((row) =>
         row.id === id
           ? {
-            ...row,
-            [field]: field === "name" ? value : Number(value || 0)
-          }
+              ...row,
+              [field]: field === 'name' ? value : Number(value || 0)
+            }
           : row
       )
     );
@@ -74,13 +75,14 @@ export default function ExpensesRedesign() {
   const addRow = () => {
     setRows((prev) => [
       ...prev,
-      { id: makeId(), name: "", amount: 0, quantity: 1, installments: 1 }
+      { id: makeId(), name: '', amount: 0, quantity: 1, installments: 1 }
     ]);
   };
 
   const removeRow = (id) => {
     setRows((prev) => prev.filter((r) => r.id !== id));
   };
+
   const buildExpensePayload = () => {
     const items = rows
       .filter((row) => row.name && row.amount)
@@ -104,21 +106,22 @@ export default function ExpensesRedesign() {
   };
 
   const guardarGasto = async () => {
+    setFeedback(null);
     if (!userId) {
-      alert("Debes iniciar sesión para registrar tus gastos.");
+      setFeedback({ type: 'warning', message: 'Debes iniciar sesión para registrar tus gastos.' });
       return;
     }
     const payload = buildExpensePayload();
     if (!payload) {
-      alert("Completa al menos un gasto antes de guardar.");
+      setFeedback({ type: 'warning', message: 'Completa al menos un gasto con monto antes de guardar.' });
       return;
     }
     try {
       await enviarGastos(payload);
-      alert("Gastos enviados correctamente.");
+      setFeedback({ type: 'success', message: 'Gastos enviados correctamente.' });
     } catch (error) {
-      console.error("Error al enviar gastos:", error);
-      alert(error.message || "Ocurrió un error al guardar los gastos.");
+      console.error('Error al enviar gastos:', error);
+      setFeedback({ type: 'danger', message: error.message || 'Ocurrió un error al guardar los gastos.' });
     }
   };
   return (
@@ -152,7 +155,7 @@ export default function ExpensesRedesign() {
               {!isBasicService && (
                 <div className="col-4 col-lg-2">Cantidad</div>
               )}
-              {!isSupermarket || !isBasicService && (
+              {!isSupermarket && !isBasicService && (
                 <div className="col-4 col-lg-2">Cuotas</div>
               )}
               <div className="col-2 d-none d-lg-block">Acción</div>
@@ -167,9 +170,9 @@ export default function ExpensesRedesign() {
                       <select
                         className="form-select"
                         value={row.name}
-                        onChange={(e) => handleChange(row.id, "name", e.target.value)}
+                        onChange={(e) => handleChange(row.id, 'name', e.target.value)}
                       >
-                        <option value="">Seleccionar servicio…</option>
+                        <option value="">Seleccionar servicio</option>
                         {basicServices.map((s) => (
                           <option key={s} value={s}>{s}</option>
                         ))}
@@ -178,9 +181,9 @@ export default function ExpensesRedesign() {
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="Ej: producto, deuda…"
+                        placeholder="Ej: producto, deuda"
                         value={row.name}
-                        onChange={(e) => handleChange(row.id, "name", e.target.value)}
+                        onChange={(e) => handleChange(row.id, 'name', e.target.value)}
                       />
                     )}
                   </div>
@@ -193,7 +196,7 @@ export default function ExpensesRedesign() {
                         className="form-control"
                         value={row.amount}
                         placeholder="0"
-                        onChange={(e) => handleChange(row.id, "amount", e.target.value)}
+                        onChange={(e) => handleChange(row.id, 'amount', e.target.value)}
                       />
                     </div>
                   </div>
@@ -205,12 +208,12 @@ export default function ExpensesRedesign() {
                         min="0"
                         className="form-control"
                         value={row.quantity}
-                        onChange={(e) => handleChange(row.id, "quantity", e.target.value)}
+                        onChange={(e) => handleChange(row.id, 'quantity', e.target.value)}
                       />
                     </div>
                   )}
 
-                  {!isSupermarket || !isBasicService && (
+                  {!isSupermarket && !isBasicService && (
                     <div className="col-4 col-lg-2">
                       <input
                         type="number"
@@ -218,15 +221,15 @@ export default function ExpensesRedesign() {
                         disabled={isBasicService}
                         className="form-control"
                         value={row.installments}
-                        onChange={(e) => handleChange(row.id, "installments", e.target.value)}
+                        onChange={(e) => handleChange(row.id, 'installments', e.target.value)}
                       />
                     </div>
                   )}
 
                   <div className="col-2 d-flex gap-2">
-                    <button className="btn btn-secondary  w-50" onClick={addRow}>+</button>
+                    <button className="btn btn-secondary w-50" onClick={addRow} type="button">+</button>
                     {rows.length > 1 && (
-                      <button className="btn btn-danger w-100" onClick={() => removeRow(row.id)}>−</button>
+                      <button className="btn btn-danger w-100" onClick={() => removeRow(row.id)} type="button">×</button>
                     )}
                   </div>
                 </div>
@@ -234,21 +237,28 @@ export default function ExpensesRedesign() {
             </div>
             <div className="mt-4 d-flex justify-content-between align-items-center">
 
-              <div className="p-2 bg-primary bg-opacity-10 rounded-3 d-flex justify-content-between align-items-center shadow-sm flex-grow-1" style={{ width: "80%" }}>
+              <div className="p-2 bg-primary bg-opacity-10 rounded-3 d-flex justify-content-between align-items-center shadow-sm flex-grow-1" style={{ width: '80%' }}>
                 <span className="fw-semibold fs-5">Total:</span>
-                <span className="fs-3 fw-bold text-primary">${total.toLocaleString("es-CL")}</span>
+                <span className="fs-3 fw-bold text-primary">${total.toLocaleString('es-CL')}</span>
               </div>
 
-              <div className="m-3 bg-primary bg-opacity-10 rounded-3 d-flex justify-content-between align-items-center shadow-sm" style={{ width: "15%" }}>
+              <div className="m-3 bg-primary bg-opacity-10 rounded-3 d-flex justify-content-between align-items-center shadow-sm" style={{ width: '15%' }}>
                 <button
                   className="p-3 btn btn-primary fw-semibold w-100"
                   onClick={guardarGasto}
+                  type="button"
                 >
                   Guardar gasto
                 </button>
               </div>
 
             </div>
+
+            {feedback && (
+              <div className={`alert alert-${feedback.type} mt-3`} role="alert">
+                {feedback.message}
+              </div>
+            )}
 
           </div>
         </div>
