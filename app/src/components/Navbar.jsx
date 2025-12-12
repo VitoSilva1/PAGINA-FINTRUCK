@@ -49,6 +49,17 @@ export default function Navbar() {
                   )}
                 </li>
               ))}
+              {isLogged && (
+                <li className="nav-item">
+                  <NavLink
+                    className={({ isActive }) => `nav-link ${isActive ? 'active fw-semibold' : ''}`}
+                    to="/profile"
+                    onClick={closeMenu}
+                  >
+                    Perfil
+                  </NavLink>
+                </li>
+              )}
             </ul>
 
             {isLogged ? (
