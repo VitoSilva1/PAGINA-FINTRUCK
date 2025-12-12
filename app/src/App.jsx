@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
+import IndicatorsBanner from './components/IndicatorsBanner';
 import Footer from './components/Footer';
 import AppRoutes from './routes/AppRoutes';
 
@@ -29,6 +30,7 @@ function App() {
   return (
     <div className="app d-flex flex-column min-vh-100">
       <Navbar />
+      <IndicatorsBanner />
       <ScrollToAnchor />
 
       <main className="flex-fill">

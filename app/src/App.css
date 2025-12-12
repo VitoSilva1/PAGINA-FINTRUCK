@@ -14,3 +14,16 @@
 .card-title {
   font-weight: 600;
 }
+
+.indicators-banner {
+  background: linear-gradient(90deg, #0d6efd 0%, #0bb8d9 50%, #0d6efd 100%);
+  color: #fff;
+  padding: 0.75rem 0;
+}
+
+.indicator-pill {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  min-width: 140px;
+}
