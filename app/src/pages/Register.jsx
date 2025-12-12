@@ -9,6 +9,8 @@ const initialState = {
   password: ''
 };
 
+const emailPattern = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
 const Register = () => {
   const [formValues, setFormValues] = useState(initialState);
   const [status, setStatus] = useState(null);
@@ -20,18 +22,37 @@ const Register = () => {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
+  const validate = () => {
+    if (!formValues.firstName.trim() || !formValues.lastName.trim() || !formValues.email.trim() || !formValues.password) {
+      return 'Por favor completa todos los campos.';
+    }
+    if (!emailPattern.test(formValues.email.trim())) {
+      return 'Ingresa un correo electrónico válido.';
+    }
+    if (formValues.password.length < 6) {
+      return 'La contraseña debe tener al menos 6 caracteres.';
+    }
+    return null;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!formValues.firstName || !formValues.lastName || !formValues.email || !formValues.password) {
-      setStatus({ type: 'danger', message: 'Por favor completa todos los campos.' });
+    const errorMsg = validate();
+    if (errorMsg) {
+      setStatus({ type: 'danger', message: errorMsg });
       return;
     }
 
     try {
       setIsSubmitting(true);
       setStatus(null);
-      await registerUser(formValues);
+      await registerUser({
+        firstName: formValues.firstName.trim(),
+        lastName: formValues.lastName.trim(),
+        email: formValues.email.trim(),
+        password: formValues.password
+      });
 
       setStatus({ type: 'success', message: 'Usuario registrado con éxito.' });
       setFormValues(initialState);
@@ -61,6 +82,7 @@ const Register = () => {
             className="form-control"
             id="firstName"
             name="firstName"
+            autoComplete="given-name"
             required
             type="text"
             value={formValues.firstName}
@@ -76,6 +98,7 @@ const Register = () => {
             className="form-control"
             id="lastName"
             name="lastName"
+            autoComplete="family-name"
             required
             type="text"
             value={formValues.lastName}
@@ -85,12 +108,13 @@ const Register = () => {
 
         <div className="mb-3">
           <label className="form-label" htmlFor="email">
-            Correo Electrónico
+            Correo electrónico
           </label>
           <input
             className="form-control"
             id="email"
             name="email"
+            autoComplete="email"
             required
             type="email"
             value={formValues.email}
@@ -107,6 +131,7 @@ const Register = () => {
             id="password"
             minLength={6}
             name="password"
+            autoComplete="new-password"
             required
             type="password"
             value={formValues.password}

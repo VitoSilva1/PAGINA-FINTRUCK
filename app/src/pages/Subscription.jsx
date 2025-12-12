@@ -4,7 +4,7 @@ const plans = [
     price: '$2.990',
     period: '/ mes',
     highlight: 'bg-primary text-white',
-    features: ['✔ 1 Usuario', '✔ Acceso limitado', '✘ Soporte prioritario'],
+    features: ['1 usuario', 'Acceso limitado', 'Soporte estándar'],
     variant: 'outline-primary'
   },
   {
@@ -12,7 +12,7 @@ const plans = [
     price: '$5.990',
     period: '/ mes',
     highlight: 'bg-success text-white',
-    features: ['✔ 5 Usuarios', '✔ Acceso completo', '✔ Soporte estándar'],
+    features: ['5 usuarios', 'Acceso completo', 'Soporte prioritario'],
     variant: 'success'
   },
   {
@@ -20,7 +20,7 @@ const plans = [
     price: '$6.990',
     period: '/ mes',
     highlight: 'bg-warning text-dark',
-    features: ['✔ Usuarios ilimitados', '✔ Acceso total', '✔ Soporte prioritario'],
+    features: ['Usuarios ilimitados', 'Acceso total', 'Soporte prioritario'],
     variant: 'warning'
   }
 ];
@@ -42,7 +42,7 @@ const Subscription = () => (
                 </h2>
                 <ul className="list-unstyled mt-3 mb-4">
                   {plan.features.map((feature) => (
-                    <li key={feature}>{feature}</li>
+                    <li key={feature}>• {feature}</li>
                   ))}
                 </ul>
                 <button type="button" className={`btn btn-${plan.variant} w-100 mt-auto`}>

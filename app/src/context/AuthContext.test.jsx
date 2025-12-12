@@ -27,6 +27,25 @@ describe('AuthContext', () => {
     });
   });
 
+  it('sets logged to false when token is expired', async () => {
+    const createToken = (payload) => {
+      const base64Url = (obj) =>
+        btoa(JSON.stringify(obj)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      return `${base64Url({ alg: 'HS256', typ: 'JWT' })}.${base64Url(payload)}.sig`;
+    };
+    const expired = Math.floor(Date.now() / 1000) - 60;
+    const token = createToken({ sub: 'user-1', exp: expired });
+    localStorage.setItem('fintrackAccessToken', token);
+
+    const { result } = renderHook(() => useAuth(), {
+      wrapper: AuthProvider,
+    });
+
+    await waitFor(() => {
+      expect(result.current.isLogged).toBe(false);
+    });
+  });
+
   it('login() toggles the authentication state to true', () => {
     const { result } = renderHook(() => useAuth(), {
       wrapper: AuthProvider,
