@@ -82,7 +82,7 @@ const Profile = () => {
         </div>
       </div>
 
-      {status.loading && (
+      {/* {status.loading && (
         <div className="alert alert-info" role="status">
           Cargando tu perfil...
         </div>
@@ -91,7 +91,7 @@ const Profile = () => {
         <div className="alert alert-warning" role="alert">
           {status.error}
         </div>
-      )}
+      )} */}
 
       <div className="row g-4">
         {quickStats.map((stat) => (
